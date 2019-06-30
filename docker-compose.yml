@@ -1,0 +1,24 @@
+version: "3"
+services:
+  nginx:
+    image: nginx
+    hostname: thanks-ar-nginx
+    container_name: thanks-ar-nginx
+    volumes:
+      - ./html:/usr/share/nginx/html
+  https-portal:
+    image: steveltn/https-portal:1.0.0
+    hostname: thanks-ar-https
+    container_name: thanks-ar-https
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    environment:
+      DOMAINS: 'thanks-ar.curseoff.com -> http://nginx'
+      STAGE: local
+    volumes:
+      - https-portal-volume:/var/lib/https-portal
+volumes:
+  https-portal-volume:
+

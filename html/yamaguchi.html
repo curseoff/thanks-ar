@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AR Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  </head>
+
+  <script type="text/javascript" src="js/aframe.min.js"></script>
+  <script type="text/javascript" src="js/aframe-extras.loader.min.js"></script>
+  <script type="text/javascript" src="js/aframe-ar.js"></script>
+
+  <script>
+    window.onload = function() {
+      var point1 = 0;
+      var point2 = 0;
+      AFRAME.registerComponent('markerhandler', {
+        init: function() {
+          const animatedMarker1 = document.querySelector("#animated-marker1");
+          const animatedMarker2 = document.querySelector("#animated-marker2");
+          const aEntity1 = document.querySelector("#animated-model1");
+          const aEntity2 = document.querySelector("#animated-model2");
+      
+          // every click, we make our model grow in size :)
+          animatedMarker1.addEventListener('click', function(ev, target) {
+              const intersectedElement1 = ev && ev.detail && ev.detail.intersectedEl;
+              if (aEntity1 && intersectedElement1 === aEntity1) {
+                  const scale1 = aEntity1.getAttribute('scale');
+                  Object.keys(scale1).forEach((key) => scale1[key] = scale1[key] * 1.1);
+                  aEntity1.setAttribute('scale', scale1);
+                  point1 = point1 + 1
+    
+                  if (point1 > 5) {
+                    const user_name = aEntity1.getAttribute('user_name');
+                    //alert(user_name + "さんにいいねしました。")
+                    location.href = "https://d1jqmomz5soqfe.cloudfront.net/like/hiro"      
+                  }
+
+    
+              }
+          });
+          animatedMarker2.addEventListener('click', function(ev, target) {
+              const intersectedElement2 = ev && ev.detail && ev.detail.intersectedEl;
+              if (aEntity2 && intersectedElement2 === aEntity2) {
+                  const scale2 = aEntity2.getAttribute('scale');
+                  Object.keys(scale2).forEach((key) => scale2[key] = scale2[key] * 1.1);
+                  aEntity2.setAttribute('scale', scale2);
+                  point2 = point2 + 1
+    
+                  if (point2 > 5) {
+                    const user_name = aEntity2.getAttribute('user_name');
+                    //alert(user_name + "さんにいいねしました。")
+                    location.href = "https://d1jqmomz5soqfe.cloudfront.net/like/kanji"  
+                  }
+    
+              }
+          });
+      }});
+    }
+  </script>
+
+  <body>
+    <a-scene embedded arjs="debugUIEnabled:false">
+      <a-assets>
+          <a-asset-item id="animated-asset-obj1" src="/data/love_heart_red.obj"></a-asset-item>
+          <a-asset-item id="animated-asset-mtl1" src="/data/love_heart_red.mtl"></a-asset-item>
+          <a-asset-item id="animated-asset-obj2" src="/data/love_heart_blue.obj"></a-asset-item>
+          <a-asset-item id="animated-asset-mtl2" src="/data/love_heart_blue.mtl"></a-asset-item>
+      </a-assets>
+
+      <a-marker markerhandler preset="hiro" emitevents="true" cursor="rayOrigin: mouse" id="animated-marker1" type='barcode' value='1'>
+        <a-entity
+          id="animated-model1"
+          obj-model="obj:#animated-asset-obj1; mtl:#animated-asset-mtl1"
+          rotation="270 0 0"
+          user_name="hiro"
+          scale="1 1 1"
+        >
+        </a-entity>
+      </a-marker>
+
+      <a-marker markerhandler preset="kanji" emitevents="true" cursor="rayOrigin: mouse" id="animated-marker2" type='barcode' value='1'>
+        <a-entity
+          id="animated-model2"
+          obj-model="obj:#animated-asset-obj2; mtl:#animated-asset-mtl2"
+          rotation="270 0 0"
+          user_name="kanji"
+          scale="1 1 1"
+        >
+        </a-entity>
+
+      </a-marker>
+
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
+
+
